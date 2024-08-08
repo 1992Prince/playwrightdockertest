@@ -1,1 +1,9 @@
 mvn test -DsuiteXmlFile=TestCaseRunner/execution_testng.xml
+
+Create a Docker volume for Maven repository: docker volume create maven-repo
+
+building docker image - docker build -t playwright-java-image .
+
+
+running docker container -  docker run -p 5900:5900 -p 6080:6080 playwright-java-image
+

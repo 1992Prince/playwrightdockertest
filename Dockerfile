@@ -19,6 +19,14 @@ RUN apt-get update && \
 # Set the working directory inside the container
 WORKDIR /app
 
+# Copy the Maven POM file and resolve dependencies (this layer is cached if pom.xml doesn't change)
+COPY pom.xml /app
+RUN mvn dependency:resolve
+
+# Copy the rest of the project files
+COPY src /app/src
+COPY src/test/resources/config.properties /app/src/test/resources/config.properties
+
 # Copy the entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 
