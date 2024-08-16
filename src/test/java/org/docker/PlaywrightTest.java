@@ -27,7 +27,7 @@ public class PlaywrightTest {
 
         playwright = Playwright.create();
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                .setHeadless(false).setArgs(arguments));
+                .setHeadless(true).setArgs(arguments));
         browserContext = browser.newContext(
                 new Browser.NewContextOptions().setViewportSize(null));
     }
