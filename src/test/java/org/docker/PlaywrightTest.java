@@ -15,12 +15,12 @@ public class PlaywrightTest {
     private Browser browser;
 
     private BrowserContext browserContext;
-    private String googleUrl;
+    private String applicationUrl = "http://advantageonlineshopping.com/#/";
 
     @Parameters({"googleUrl"})
     @BeforeClass
-    public void setUp(String googleUrl) {
-        this.googleUrl = googleUrl;
+    public void setUp() {
+        //this.applicationUrl = applicationUrl;
 
         // Log the Java version to confirm JDK 17
         logger.info("Running on Java version: " + System.getProperty("java.version"));
@@ -35,11 +35,46 @@ public class PlaywrightTest {
                 new Browser.NewContextOptions().setViewportSize(null));
     }
 
+
+
     @Test
-    public void testGoogleHomePage() {
+    public void testGoogleHomePage() throws InterruptedException {
         Page page = browserContext.newPage();
-        page.navigate(googleUrl);
-        assert page.title().contains("Google");
+        page.navigate(applicationUrl);
+        page.locator("(//*[@id='menuSearch'])[1]").click();
+
+        page.locator("//input[@id='autoComplete']").type("laptop", new Locator.TypeOptions().setDelay(2));
+
+        page.locator("//p[text()='HP ENVY - 17T TOUCH LAPTOP']").click();
+
+        page.locator("//button[text()='ADD TO CART']").click();
+
+        page.locator("//*[@id='checkOutPopUp']").click();
+
+        String tezt = page.locator("(//*[contains(text(),'TOTAL')])[4]").innerText();
+
+        System.out.println("Text is - " + tezt);
+
+        Thread.sleep(5000);
+    }
+
+    @Test
+    public void testUserManagementPage() throws InterruptedException {
+        Page page = browserContext.newPage();
+        page.navigate(applicationUrl);
+        page.locator("//*[@id='menuUser']").click();
+
+        page.locator("//*[@name='username']").type("Pikachu", new Locator.TypeOptions().setDelay(2));
+
+        page.locator("//*[@name='password']").type("Pikachu");
+
+        page.locator("//*[@id='sign_in_btn']").click();
+
+        String error = page.locator("//*[@id='signInResultMessage']").innerText();
+
+        System.out.println("Error is - " + error);
+
+        Thread.sleep(5000);
     }
 
     @AfterClass
